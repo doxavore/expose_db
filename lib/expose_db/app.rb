@@ -61,7 +61,11 @@ module ExposeDB
       id = params[:id]
       dataset = db[table_name]
 
-      json dataset[id: id]
+      if result = dataset[id: id]
+        json result
+      else
+        raise Sinatra::NotFound
+      end
     end
   end
 end
