@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ExposeDB Console</title>
+    <style>
+      th {
+        vertical-align: top;
+      }
+      input[type=text] {
+        width: 250px;
+      }
+    </style>
+  </head>
+  <body>
+    <form id="console-form" method="get" action="/">
+      <table>
+        <tbody>
+          <tr>
+            <th>Table Name:</th>
+            <td><input type="text" id="table-name" value="accounts"/></td>
+          </tr>
+          <tr>
+            <th>Query:</th>
+            <td><textarea type="text" name="q" cols="80" rows="5">name = ?</textarea></td>
+          </tr>
+          <tr>
+            <th>Values:</th>
+            <td>
+              <% 1.upto(6) do |n| %>
+                <input type="text" name="values[]" value="<%= n == 1 ? 'Rowe LLC' : '' %>"/>
+                <br/>
+              <% end %>
+            </td>
+          </tr>
+          <tr>
+            <th></th>
+            <td><input type="submit"/></td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+
+    <script>
+      (function() {
+        var form = document.getElementById('console-form'),
+            tableInput = document.getElementById('table-name');
+
+        form.onsubmit = function() {
+          form.action = "/" + tableInput.value;
+          return true;
+        };
+      })();
+    </script>
+  </body>
+</html>

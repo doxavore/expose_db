@@ -1,0 +1,51 @@
+#!/usr/bin/env ruby
+
+$:.unshift File.expand_path('../../lib', __FILE__)
+
+require 'rubygems'
+require 'optparse'
+require 'expose_db'
+
+database_uri = nil
+load_libs = []
+server_port = 4567
+
+opts = OptionParser.new do |opts|
+  opts.banner = "ExposeDB: Expose your database as an API."
+  opts.define_head "Usage: expose-db [options] DATABASE_URI"
+  opts.separator ""
+  opts.separator "Examples:"
+  opts.separator "  expose-db postgres://user:password@localhost/my_db"
+  opts.separator ""
+  opts.separator "For more information see README.md"
+  opts.separator ""
+  opts.separator "Options:"
+
+  opts.on "-p", "--port PORT", "Specify the server port number (default: 4567)" do |arg|
+    server_port = arg.to_i
+  end
+
+  opts.on "-r", "--require LIB", "require a driver library (ie: pg, sqlite3, etc)" do |arg|
+    load_libs << arg
+  end
+
+  opts.on "-v", "--version", "Output version and quit" do
+    puts "ExposeDB version #{ExposeDB.version}"
+    exit 0
+  end
+end
+opts.parse!
+
+database_uri = ARGV.shift
+
+if database_uri.nil?
+  puts "ERROR: Please specify a database URI"
+  exit 1
+end
+
+load_libs.each { |lib| require lib }
+
+db = Sequel.connect(database_uri)
+ExposeDB::App.run!(db, port: server_port)
+
+# vim: set ft=ruby:
