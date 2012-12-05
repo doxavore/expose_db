@@ -9,6 +9,8 @@ Gem::Specification.new do |s|
   s.description = s.summary
   s.author      = "Doug Mayer"
   s.email       = "doxavore@gmail.com"
+  s.homepage    = "https://github.com/doxavore/expose_db"
+  s.license     = "MIT"
   s.files       = %w(MIT-LICENSE README.md) + Dir["{bin,spec,lib}/**/*"]
   s.require_path = "lib"
   s.bindir      = "bin"
