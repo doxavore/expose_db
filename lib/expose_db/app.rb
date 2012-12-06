@@ -32,7 +32,7 @@ module ExposeDB
         @table_name ||= params[:table].to_sym
       end
 
-      def render(obj)
+      def expose(obj)
         MultiJson.dump obj
       end
     end
@@ -52,7 +52,7 @@ module ExposeDB
         dataset = dataset.filter(query, *values)
       end
 
-      render dataset.to_a
+      expose dataset.to_a
     end
 
     get '/:table/:id' do
@@ -62,7 +62,7 @@ module ExposeDB
       dataset = db[table_name]
 
       if result = dataset[id: id]
-        render result
+        expose result
       else
         raise Sinatra::NotFound
       end
