@@ -98,7 +98,7 @@ Task.find(456).person.first_name
 ```
 
 Implementing your own filter methods are easy:
-```
+```ruby
 class Task < BaseModel
   exposed_as 'tasks'
 
