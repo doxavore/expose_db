@@ -17,7 +17,9 @@ Gem::Specification.new do |s|
   s.executables << "expose-db"
   s.required_ruby_version = ">= 1.9.1"
 
-  s.add_dependency 'sinatra'
-  s.add_dependency 'sequel'
+  s.add_dependency 'hashie'
+  s.add_dependency 'httparty'
   s.add_dependency 'multi_json'
+  s.add_dependency 'sequel'
+  s.add_dependency 'sinatra'
 end
