@@ -9,6 +9,7 @@ require 'expose_db'
 database_uri = nil
 load_libs = []
 server_port = 4567
+public_folder = nil
 
 opts = OptionParser.new do |opts|
   opts.banner = "ExposeDB: Expose your database as an API."
@@ -25,6 +26,10 @@ opts = OptionParser.new do |opts|
     server_port = arg.to_i
   end
 
+  opts.on "-s", "--static DIRECTORY", "Serve static files from DIRECTORY" do |arg|
+    public_folder = File.expand_path(arg)
+  end
+
   opts.on "-r", "--require LIB", "require a driver library (ie: pg, sqlite3, etc)" do |arg|
     load_libs << arg
   end
@@ -39,13 +44,18 @@ opts.parse!
 database_uri = ARGV.shift
 
 if database_uri.nil?
+  puts opts
+  puts ""
   puts "ERROR: Please specify a database URI"
   exit 1
 end
 
 load_libs.each { |lib| require lib }
 
+sinatra_options = {port: server_port}
+sinatra_options[:public_folder] = public_folder if public_folder
+
 db = Sequel.connect(database_uri)
-ExposeDB::App.run!(db, port: server_port)
+ExposeDB::App.run!(db, sinatra_options)
 
 # vim: set ft=ruby:
